@@ -168,12 +168,6 @@ class App extends Component {
               style={{ maxWidth: "600px" }}
             >
               <div className="content mr-auto ml-auto">
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                ></a>
-
                 {content}
               </div>
             </main>
