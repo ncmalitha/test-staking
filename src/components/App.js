@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Navbar from "./Navbar";
-import Web3 from "web3";
 import "./App.css";
 import * as DaiToken from "../abis/DaiToken.json";
 import * as DappToken from "../abis/DappToken.json";
@@ -170,7 +169,7 @@ class App extends Component {
             >
               <div className="content mr-auto ml-auto">
                 <a
-                  href="http://www.dappuniversity.com/bootcamp"
+                  href="#"
                   target="_blank"
                   rel="noopener noreferrer"
                 ></a>
