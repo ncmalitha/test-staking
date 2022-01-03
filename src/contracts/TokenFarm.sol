@@ -1,4 +1,5 @@
-pragma solidity ^0.5.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
 import "./DappToken.sol";
 import "./DaiToken.sol";
@@ -15,7 +16,7 @@ contract TokenFarm {
     mapping(address => bool) public isStaking;
 
 
-    constructor (DappToken _dappToken, DaiToken _daiToken) public {
+    constructor (DappToken _dappToken, DaiToken _daiToken) {
         dappToken = _dappToken;
         daiToken = _daiToken;
         owner = msg.sender;
