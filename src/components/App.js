@@ -31,16 +31,15 @@ class App extends Component {
       );
       console.log(daiToken);
 
-      this.setState({daiToken: daiToken});
+      this.setState({ daiToken: daiToken });
 
-      console.log('daiToken', this.state.daiToken);
+      console.log("daiToken", this.state.daiToken);
 
       const daiTokenBalance = await daiToken.methods
         .balanceOf(this.state.account)
         .call();
       this.setState({ daiTokenBalance: daiTokenBalance.toString() });
       console.log(daiTokenBalance);
-      
     }
 
     const dappTokenData = DappToken.networks[networkId];
@@ -51,7 +50,7 @@ class App extends Component {
       );
       console.log(dappToken);
 
-      this.setState({dappToken: dappToken});
+      this.setState({ dappToken: dappToken });
 
       const dappTokenBalance = await dappToken.methods
         .balanceOf(this.state.account)
@@ -69,7 +68,7 @@ class App extends Component {
       );
       console.log(tokenFarm);
 
-      this.setState({tokenFarm: tokenFarm});
+      this.setState({ tokenFarm: tokenFarm });
 
       const tokenFarmBalance = await tokenFarm.methods
         .stakingBalance(this.state.account)
@@ -104,9 +103,10 @@ class App extends Component {
       .on("transactionHash", (hash) => {
         console.log(hash);
         console.log(this.state.tokenFarm.methods);
+
         this.state.tokenFarm.methods
           .stakeTokens(amount)
-          .send({ from: this.state.account})
+          .send({ from: this.state.account })
           .on("transactionHash", (hash) => {
             this.setState({ loading: false });
           });
@@ -116,11 +116,11 @@ class App extends Component {
   unstakeTokens = () => {
     this.setState({ loading: true });
     this.state.tokenFarm.methods
-          .unstake()
-          .send({ from: this.state.account})
-          .on("transactionHash", (hash) => {
-            this.setState({ loading: false });
-          });
+      .unstake()
+      .send({ from: this.state.account })
+      .on("transactionHash", (hash) => {
+        this.setState({ loading: false });
+      });
   };
 
   constructor(props) {
@@ -167,9 +167,7 @@ class App extends Component {
               className="col-lg-12 ml-auto mr-auto"
               style={{ maxWidth: "600px" }}
             >
-              <div className="content mr-auto ml-auto">
-                {content}
-              </div>
+              <div className="content mr-auto ml-auto">{content}</div>
             </main>
           </div>
         </div>
