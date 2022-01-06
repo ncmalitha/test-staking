@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./DappToken.sol";
 import "./DaiToken.sol";
 
-contract TokenFarm {
+contract TokenFarm is Ownable {
     string public name = "Dapp Token Farm";
     DappToken public dappToken;
     DaiToken public daiToken;
-    address owner;
 
     address[] public stakers;
     mapping(address => uint) public stakingBalance;
@@ -19,7 +19,6 @@ contract TokenFarm {
     constructor (DappToken _dappToken, DaiToken _daiToken) {
         dappToken = _dappToken;
         daiToken = _daiToken;
-        owner = msg.sender;
     }
 
     function stakeTokens(uint _amount) public {
@@ -45,8 +44,7 @@ contract TokenFarm {
         isStaking[msg.sender] = false;
     }
 
-    function issueTokens() public {
-        require(msg.sender== owner, "caller must be owner");
+    function issueTokens() public onlyOwner {
         for(uint i = 0; i  < stakers.length; i++) {
             address receipient = stakers[i];
             uint balance = stakingBalance[receipient];  
