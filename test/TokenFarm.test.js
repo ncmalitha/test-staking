@@ -1,4 +1,5 @@
 const { assert } = require("chai");
+const truffleAssert = require('truffle-assertions');
 
 const DaiToken = artifacts.require("DaiToken");
 const DappToken = artifacts.require("DappToken");
@@ -114,6 +115,43 @@ contract("TokenFarm", ([owner, investor]) => {
 
       investorTokens = await daiToken.balanceOf(investor);
       assert.equal(investorTokens.toString(), tokens('100'), "Wallet have the money back");
+
+    });
+  });
+
+  describe("Pausing functions", async () => {
+    it("pause contract", async () => {
+      await tokenFarm.pause();
+    });
+
+    it("unpause contract", async () => {
+      await tokenFarm.unpause();
+    });
+  });
+
+  describe("Farming tokens when pause", async () => {
+
+    it("rewards investors for staking", async () => {
+      
+      let result;
+
+      result = await daiToken.balanceOf(investor);
+      assert.equal(result.toString(), tokens('100'), "Mock wallet balance is correct before staking");
+
+      // staking mocked dai
+      await daiToken.approve(tokenFarm.address, tokens('100'), {
+        from: investor
+      });
+
+      await tokenFarm.pause();
+
+      await truffleAssert.fails(
+        tokenFarm.stakeTokens(tokens('100'), {
+          from: investor
+        }),
+        truffleAssert.ErrorType.REVERT,
+        "Pausable: paused"
+      );
 
     });
   });

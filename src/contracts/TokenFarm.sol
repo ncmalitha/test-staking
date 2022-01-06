@@ -2,10 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./DappToken.sol";
 import "./DaiToken.sol";
 
-contract TokenFarm is Ownable {
+contract TokenFarm is Ownable, Pausable {
     string public name = "Dapp Token Farm";
     DappToken public dappToken;
     DaiToken public daiToken;
@@ -21,7 +22,7 @@ contract TokenFarm is Ownable {
         daiToken = _daiToken;
     }
 
-    function stakeTokens(uint _amount) public {
+    function stakeTokens(uint _amount) public whenNotPaused {
 
         require (_amount > 0, "Tokens should be more than 0");
         daiToken.transferFrom(msg.sender, address(this), _amount);
@@ -54,5 +55,13 @@ contract TokenFarm is Ownable {
             }
 
         }
+    }
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
     }
 }
