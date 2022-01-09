@@ -4,7 +4,6 @@ class Main extends Component {
   render() {
     return (
       <div>
-      
         <table className="table table-borderless text-muted text-center">
           <thead>
             <tr>
@@ -15,13 +14,15 @@ class Main extends Component {
           <tbody>
             <tr>
               <td>
-                {window.web3.utils.fromWei(this.props.stakingBalance, "Ether")} MDAI
+                {window.web3.utils.fromWei(this.props.stakingBalance, "Ether")}{" "}
+                MDAI
               </td>
               <td>
                 {window.web3.utils.fromWei(
                   this.props.dappTokenBalance,
                   "Ether"
-                )} DAPP
+                )}{" "}
+                DAPP
               </td>
             </tr>
           </tbody>
@@ -29,26 +30,35 @@ class Main extends Component {
 
         <div className="card mb-4">
           <div className="card-body">
-            <form className="mb-3" onSubmit={(event) => {
-              event.preventDefault();
-              let amount;
-              amount = this.input.value.toString();
-              amount = window.web3.utils.toWei(amount, 'Ether');
-              this.props.stakeTokens(amount)
-            }}>
+            <form
+              className="mb-3"
+              onSubmit={(event) => {
+                event.preventDefault();
+                let amount;
+                amount = this.input.value.toString();
+                amount = window.web3.utils.toWei(amount, "Ether");
+                this.props.stakeTokens(amount);
+              }}
+            >
               <div>
                 <label className="float-left">
                   <b>Stake Tokens</b>
                 </label>
                 <span className="float-right text-muted">
-                Balance: {window.web3.utils.fromWei(this.props.daiTokenBalance, "Ether")} MDAI
-                  
+                  Balance:{" "}
+                  {window.web3.utils.fromWei(
+                    this.props.daiTokenBalance,
+                    "Ether"
+                  )}{" "}
+                  MDAI
                 </span>
               </div>
               <div className="input-group mb-4">
                 <input
                   type="number"
-                  ref={(input) => { this.input = input}}
+                  ref={(input) => {
+                    this.input = input;
+                  }}
                   className="form-control form-control-lg"
                   placeholder="0"
                   required
@@ -59,17 +69,40 @@ class Main extends Component {
                     &nbsp; mDAI
                   </div>
                 </div>
-
-                
               </div>
-              <button type="submit" className="btn btn-primary btn-lg">Stake</button>
-              <button type="submit" className="btn btn-secondary btn-lg" onClick={(input) => { 
-                let amount = this.input.value.toString();
-                amount = window.web3.utils.toWei(amount, 'Ether');
-                this.props.unstakeTokenWithAmount(amount);
-              }
-                }>Withdraw</button>
-              <button type="submit" className="btn btn-link btn-block btn-lg" onClick={(input) => {this.props.unstake()}}>Withdraw All</button>
+              <div className="row">
+                <div className="col-md-6">
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-block btn-lg"
+                  >
+                    Stake
+                  </button>
+                </div>
+                <div className="col-md-6">
+                  <button
+                    type="submit"
+                    className="btn btn-secondary btn-block btn-lg"
+                    onClick={(input) => {
+                      let amount = this.input.value.toString();
+                      amount = window.web3.utils.toWei(amount, "Ether");
+                      this.props.unstakeTokenWithAmount(amount);
+                    }}
+                  >
+                    Withdraw
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-link btn-block btn-lg"
+                onClick={(input) => {
+                  this.props.unstake();
+                }}
+              >
+                Withdraw All
+              </button>
             </form>
           </div>
         </div>
