@@ -62,7 +62,13 @@ class Main extends Component {
 
                 
               </div>
-              <button type="submit" className="btn btn-primary btn-block btn-lg">Stake</button>
+              <button type="submit" className="btn btn-primary btn-lg">Stake</button>
+              <button type="submit" className="btn btn-secondary btn-lg" onClick={(input) => { 
+                let amount = this.input.value.toString();
+                amount = window.web3.utils.toWei(amount, 'Ether');
+                this.props.unstakeTokenWithAmount(amount);
+              }
+                }>Withdraw</button>
               <button type="submit" className="btn btn-link btn-block btn-lg" onClick={(input) => {this.props.unstake()}}>Withdraw All</button>
             </form>
           </div>
