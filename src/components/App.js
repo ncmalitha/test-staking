@@ -95,28 +95,40 @@ class App extends Component {
     }
   }
 
-  stakeTokens = (amount) => {
+  stakeTokens = async (amount) => {
     this.setState({ loading: true });
-    this.state.daiToken.methods
+    await this.state.daiToken.methods
       .approve(this.state.tokenFarm._address, amount)
       .send({ from: this.state.account })
       .on("transactionHash", (hash) => {
         console.log(hash);
         console.log(this.state.tokenFarm.methods);
+      });
 
-        this.state.tokenFarm.methods
+      await this.state.tokenFarm.methods
           .stakeTokens(amount)
           .send({ from: this.state.account })
           .on("transactionHash", (hash) => {
             this.setState({ loading: false });
           });
-      });
+          
   };
 
   unstakeTokens = () => {
     this.setState({ loading: true });
     this.state.tokenFarm.methods
       .unstake()
+      .send({ from: this.state.account })
+      .on("transactionHash", (hash) => {
+        this.setState({ loading: false });
+      });
+  };
+
+  unstakeTokenWithAmount = (amount) => {
+    console.log(amount, 'unstake amount')
+    this.setState({ loading: true });
+    this.state.tokenFarm.methods
+      .withdrawAmount(amount)
       .send({ from: this.state.account })
       .on("transactionHash", (hash) => {
         this.setState({ loading: false });
@@ -154,6 +166,7 @@ class App extends Component {
           stakingBalance={this.state.stakingBalance}
           stakeTokens={this.stakeTokens}
           unstake={this.unstakeTokens}
+          unstakeTokenWithAmount={this.unstakeTokenWithAmount}
         ></Main>
       );
     }
