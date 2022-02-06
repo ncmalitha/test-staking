@@ -126,6 +126,78 @@ contract("TokenFarm", ([owner, investor, withdrawInvestor, farmingInvestor]) => 
     });
   });
 
+  describe("Withdraw tokens", async () => {
+    let result;
+    
+    it("withdraw amount when nothing staked", async () => {
+      await tokenFarm.withdrawAmount(tokens('150'), {
+        from: withdrawInvestor
+      }).should.be.rejected;
+
+      result = await tokenFarm.isStaking(withdrawInvestor);
+      assert.equal(result, false, "is staking");
+    });
+
+    it("withdraw amount greater than staked", async () => {
+      result = await daiToken.balanceOf(withdrawInvestor);
+
+      // staking mocked dai
+      await daiToken.approve(tokenFarm.address, tokens('100'), {
+        from: withdrawInvestor
+      });
+
+      await tokenFarm.stakeTokens(tokens('100'), {
+        from: withdrawInvestor
+      });
+
+      await tokenFarm.withdrawAmount(tokens('150'), {
+        from: withdrawInvestor
+      }).should.be.rejected;
+
+      result = await tokenFarm.isStaking(withdrawInvestor);
+      assert.equal(result, true, "is staking");
+    });
+
+    it("withdraw amount same as staked", async () => {
+      result = await tokenFarm.withdrawAmount(tokens('100'), {
+        from: withdrawInvestor
+      });
+
+      // now investor staking balance is 0
+      result = await tokenFarm.stakingBalance(withdrawInvestor);
+      assert.equal(result.toString(), 0, "staking balance is zero");
+
+      result = await tokenFarm.isStaking(withdrawInvestor);
+      assert.equal(result, false, "is staking");
+    });
+
+    it("withdraw amount less than staked", async () => {
+
+      // staking mocked dai
+      await daiToken.approve(tokenFarm.address, tokens('100'), {
+        from: withdrawInvestor
+      });
+
+      await tokenFarm.stakeTokens(tokens('100'), {
+        from: withdrawInvestor
+      });
+
+      result = await tokenFarm.stakingBalance(withdrawInvestor);
+      assert.equal(result.toString(), tokens('100'), "staking balance is 100");
+
+      result = await tokenFarm.withdrawAmount(tokens('50'), {
+        from: withdrawInvestor
+      });
+
+      // now investor staking balance is 50
+      result = await tokenFarm.stakingBalance(withdrawInvestor);
+      assert.equal(result.toString(), tokens('50'), "staking balance is 50");
+
+      result = await tokenFarm.isStaking(withdrawInvestor);
+      assert.equal(result, true, "is staking");
+    });
+  });
+
   describe("Pausing functions", async () => {
     let isPaused;
     it("pause contract", async () => {

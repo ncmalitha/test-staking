@@ -96,4 +96,16 @@ contract TokenFarm is Ownable, Pausable {
     function unpause() public onlyOwner {
         _unpause();
     }
+
+    function withdrawAmount(uint _amount) public {
+        uint balance = stakingBalance[msg.sender];  
+        require(balance >= _amount, "withdraw amount has to greater than or equal to staked balance");
+        daiToken.transfer(msg.sender, _amount);
+
+        stakingBalance[msg.sender] -= _amount;
+        if(stakingBalance[msg.sender] == 0) {
+            isStaking[msg.sender] = false;
+        }
+    }
+
 }
