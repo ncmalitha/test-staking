@@ -110,18 +110,18 @@ contract("TokenFarm", ([owner, investor, withdrawInvestor, farmingInvestor]) => 
       // //try to issue not from owner should work
       // await tokenFarm.issueTokens({from: investor});
 
-      // //unstake tokens
-      // await tokenFarm.unstake({from: investor});
+      //unstake tokens
+      await tokenFarm.unstake({from: investor});
 
-      // // now investor staking balance is 0
-      // result = await tokenFarm.stakingBalance(investor);
-      // assert.equal(result.toString(), 0, "staking balance is zero");
+      // now investor staking balance is 0
+      result = await tokenFarm.stakingBalance(investor);
+      assert.equal(result.toString(), 0, "staking balance is zero");
 
-      // result = await tokenFarm.isStaking(investor);
-      // assert.equal(result, false, "is staking");
+      result = await tokenFarm.isStaking(investor);
+      assert.equal(result, false, "is staking");
 
-      // investorTokens = await daiToken.balanceOf(investor);
-      // assert.equal(investorTokens.toString(), tokens('100'), "Wallet have the money back");
+      investorTokens = await daiToken.balanceOf(investor);
+      assert.equal(investorTokens.toString(), tokens('100'), "Wallet have the money back");
 
     });
   });
