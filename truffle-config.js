@@ -7,6 +7,10 @@ console.log(process.env.MNEMONIC);
 console.log(process.env.INFURA_API_KEY);
 
 module.exports = {
+  mocha: {
+    enableTimeouts: false,
+    before_timeout: 120000
+  },
   networks: {
     development: {
       host: "127.0.0.1",

@@ -16,6 +16,8 @@ contract TokenFarm is Ownable, Pausable {
     mapping(address => bool) public hasStaked;
     mapping(address => bool) public isStaking;
 
+    event Received(address, uint);
+
     mapping(address => uint) public dappTokenBalance;
     uint public interestRate;
     uint public lastUpdateTime; // last block updated time  
@@ -67,7 +69,7 @@ contract TokenFarm is Ownable, Pausable {
     }
 
     function getTimeGapSinceLastBlock() public view returns (uint) {
-        return (lastUpdateTime - block.timestamp);
+        return (block.timestamp - lastUpdateTime);
     } 
 
     function rewardPerAmount(uint _amount) public view returns (uint) {
@@ -106,6 +108,10 @@ contract TokenFarm is Ownable, Pausable {
         if(stakingBalance[msg.sender] == 0) {
             isStaking[msg.sender] = false;
         }
+    }
+
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
     }
 
 }
